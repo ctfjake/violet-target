@@ -1,6 +1,6 @@
 # Chirpy — Intentionally Vulnerable Target App
 
-Chirpy is a deliberately insecure micro-blogging platform built as a benchmark target for security testing tools and AI agents (specifically [Violet](https://github.com/ctfjake/code-violet)).
+Chirpy is a deliberately insecure micro-blogging platform built as a benchmark target for security testing tools and AI agents.
 
 > **Warning:** This application contains intentional security vulnerabilities. Run it only in an isolated, local environment. Never expose it to the public internet.
 
