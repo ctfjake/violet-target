@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}{{ post.title }} — Chirpy{% endblock %}
+{% block content %}
+<article class="post-full">
+  <div class="post-meta">
+    <a class="author" href="{{ url_for('profile', user_id=post.user_id) }}">{{ post.username }}</a>
+    <span class="date">{{ post.created_at }}</span>
+    {% if post.is_private %}
+      <span class="badge private">Private</span>
+    {% endif %}
+  </div>
+
+  <h1>{{ post.title }}</h1>
+
+  <div class="post-body">
+    {# VULN: Stored XSS — post content rendered without escaping #}
+    {{ post.content | safe }}
+  </div>
+
+  {% if session.user %}
+    <div class="post-actions">
+      <form method="post" action="{{ url_for('delete_post', post_id=post.id) }}">
+        <button class="btn-sm danger" onclick="return confirm('Delete this post?')">Delete Post</button>
+      </form>
+    </div>
+  {% endif %}
+</article>
+
+<section class="comments">
+  <h2>Comments</h2>
+
+  {% for comment in comments %}
+    <div class="comment">
+      <div class="comment-meta">
+        <a class="author" href="{{ url_for('profile', user_id=comment.user_id) }}">{{ comment.username }}</a>
+        <span class="date">{{ comment.created_at }}</span>
+      </div>
+      <div class="comment-body">
+        {# VULN: Stored XSS — comment content rendered without escaping #}
+        {{ comment.content | safe }}
+      </div>
+    </div>
+  {% else %}
+    <p class="empty-state">No comments yet.</p>
+  {% endfor %}
+
+  {% if session.user %}
+    <div class="comment-form">
+      <h3>Leave a comment</h3>
+      <form method="post" action="{{ url_for('add_comment', post_id=post.id) }}">
+        <textarea name="content" rows="4" placeholder="Write your comment…" required></textarea>
+        <button class="btn" type="submit">Post Comment</button>
+      </form>
+    </div>
+  {% endif %}
+</section>
+{% endblock %}

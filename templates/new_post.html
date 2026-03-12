@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}New Post — Chirpy{% endblock %}
+{% block content %}
+<div class="form-box">
+  <h1>New Post</h1>
+
+  <form method="post" action="{{ url_for('new_post') }}">
+    <label>Title
+      <input type="text" name="title" autofocus required placeholder="Give your post a title…" />
+    </label>
+    <label>Content
+      <textarea name="content" rows="8" required placeholder="What's on your mind?"></textarea>
+    </label>
+    <label class="checkbox-label">
+      <input type="checkbox" name="is_private" />
+      Make this post private
+    </label>
+    <button class="btn" type="submit">Publish</button>
+  </form>
+</div>
+{% endblock %}

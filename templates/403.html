@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Access Denied — Chirpy{% endblock %}
+{% block content %}
+<div class="error-page">
+  <h1>403</h1>
+  <p>You don't have permission to view this page.</p>
+  <a class="btn" href="{{ url_for('index') }}">Go Home</a>
+</div>
+{% endblock %}

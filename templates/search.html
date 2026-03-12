@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Search — Chirpy{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>Search Posts</h1>
+</div>
+
+<form method="get" action="{{ url_for('search') }}" class="search-form">
+  <input type="text" name="q" value="{{ query }}" placeholder="Search by title…" autofocus />
+  <button class="btn" type="submit">Search</button>
+</form>
+
+{% if query %}
+  <div class="search-results-header">
+    {# VULN: Reflected XSS — 'query' is Markup() so it renders raw HTML #}
+    <p>Results for: <strong>{{ query }}</strong></p>
+  </div>
+
+  {% if results %}
+    <div class="post-list">
+      {% for post in results %}
+        <div class="post-card">
+          <div class="post-meta">
+            <a class="author" href="{{ url_for('profile', user_id=post.user_id) }}">{{ post.username }}</a>
+            <span class="date">{{ post.created_at }}</span>
+          </div>
+          <h2 class="post-title">
+            <a href="{{ url_for('view_post', post_id=post.id) }}">{{ post.title }}</a>
+          </h2>
+          <p class="post-excerpt">{{ post.content[:100] }}{% if post.content|length > 100 %}…{% endif %}</p>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="empty-state">No posts matched your search.</p>
+  {% endif %}
+{% endif %}
+{% endblock %}

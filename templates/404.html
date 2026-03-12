@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Not Found — Chirpy{% endblock %}
+{% block content %}
+<div class="error-page">
+  <h1>404</h1>
+  <p>That page doesn't exist.</p>
+  <a class="btn" href="{{ url_for('index') }}">Go Home</a>
+</div>
+{% endblock %}

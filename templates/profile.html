@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}{{ profile_user.username }} — Chirpy{% endblock %}
+{% block content %}
+<div class="profile">
+  <div class="profile-header">
+    <div class="avatar">{{ profile_user.username[0].upper() }}</div>
+    <div>
+      <h1>{{ profile_user.username }}</h1>
+      <p class="bio">{{ profile_user.bio or "No bio yet." }}</p>
+      {% if profile_user.role == 'admin' %}
+        <span class="badge admin">Admin</span>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if session.user and session.user.id == profile_user.id %}
+    <div class="edit-profile">
+      <h2>Edit Profile</h2>
+      <form method="post" action="{{ url_for('update_profile') }}">
+        <label>Bio
+          <textarea name="bio" rows="3">{{ profile_user.bio }}</textarea>
+        </label>
+        {# VULN: Hidden role field — mass assignment; user can change their own role #}
+        <input type="hidden" name="role" value="{{ profile_user.role }}" />
+        <button class="btn" type="submit">Save</button>
+      </form>
+    </div>
+  {% endif %}
+</div>
+
+<section>
+  <h2>Public Posts by {{ profile_user.username }}</h2>
+  {% if posts %}
+    <div class="post-list">
+      {% for post in posts %}
+        <div class="post-card">
+          <h3 class="post-title">
+            <a href="{{ url_for('view_post', post_id=post.id) }}">{{ post.title }}</a>
+          </h3>
+          <p class="post-excerpt">{{ post.content[:100] }}…</p>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="empty-state">No public posts.</p>
+  {% endif %}
+</section>
+{% endblock %}

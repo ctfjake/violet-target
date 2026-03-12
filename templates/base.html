@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Chirpy{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+  <nav class="navbar">
+    <a class="brand" href="{{ url_for('index') }}">🐦 Chirpy</a>
+    <div class="nav-links">
+      <a href="{{ url_for('search') }}">Search</a>
+      <a href="{{ url_for('fetch') }}">Link Preview</a>
+      {% if session.user %}
+        <a href="{{ url_for('new_post') }}">+ Post</a>
+        <a href="{{ url_for('profile', user_id=session.user.id) }}">{{ session.user.username }}</a>
+        {% if session.role == 'admin' %}
+          <a href="{{ url_for('admin') }}" class="admin-link">Admin</a>
+        {% endif %}
+        <a href="{{ url_for('logout') }}">Logout</a>
+      {% else %}
+        <a href="{{ url_for('login') }}">Login</a>
+        <a href="{{ url_for('register') }}">Register</a>
+      {% endif %}
+    </div>
+  </nav>
+
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer>
+    <p>© 2024 Chirpy — Share your thoughts.</p>
+  </footer>
+</body>
+</html>

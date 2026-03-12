@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Register — Chirpy{% endblock %}
+{% block content %}
+<div class="auth-box">
+  <h1>Create an account</h1>
+  <p class="subtitle">Join Chirpy and start posting.</p>
+
+  {% if error %}
+    <div class="alert error">{{ error }}</div>
+  {% endif %}
+
+  <form method="post" action="{{ url_for('register') }}">
+    <label>Username
+      <input type="text" name="username" autofocus required />
+    </label>
+    <label>Password
+      <input type="password" name="password" required />
+    </label>
+    <button class="btn full" type="submit">Create Account</button>
+  </form>
+
+  <p class="auth-switch">Already have an account? <a href="{{ url_for('login') }}">Log in</a></p>
+</div>
+{% endblock %}

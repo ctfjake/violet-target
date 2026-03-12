@@ -1,0 +1,14 @@
+services:
+  chirpy:
+    build: .
+    ports:
+      - "5001:5000"
+    volumes:
+      # Named volume keeps DB persistent across restarts.
+      # Run `docker compose down -v` to wipe it and get a clean slate.
+      - chirpy-data:/data
+    environment:
+      DATABASE_PATH: /data/chirpy.db
+
+volumes:
+  chirpy-data:

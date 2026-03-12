@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Link Preview — Chirpy{% endblock %}
+{% block content %}
+<div class="form-box">
+  <h1>Link Preview</h1>
+  <p class="subtitle">Paste a URL to preview its content (used by the editor for rich embeds).</p>
+
+  <form method="get" action="{{ url_for('fetch') }}">
+    <label>URL
+      <input type="text" name="url" value="{{ url }}" placeholder="https://example.com" autofocus />
+    </label>
+    <button class="btn" type="submit">Fetch</button>
+  </form>
+
+  {% if error %}
+    <div class="alert error">Error: {{ error }}</div>
+  {% endif %}
+
+  {% if result is not none %}
+    <div class="fetch-result">
+      <div class="fetch-result-header">
+        <strong>Response from:</strong> {{ url }}
+      </div>
+      <pre class="fetch-body">{{ result }}</pre>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

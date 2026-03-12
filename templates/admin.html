@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Admin Panel — Chirpy{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>Admin Panel</h1>
+  <span class="badge admin">Admin Access</span>
+</div>
+
+<section class="admin-section">
+  <h2>All Users</h2>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Username</th>
+        <th>Password</th>
+        <th>Role</th>
+        <th>Bio</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in users %}
+        <tr>
+          <td>{{ user.id }}</td>
+          <td><a href="{{ url_for('profile', user_id=user.id) }}">{{ user.username }}</a></td>
+          <td class="password-cell">{{ user.password }}</td>
+          <td><span class="badge {{ user.role }}">{{ user.role }}</span></td>
+          <td>{{ user.bio }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+
+<section class="admin-section">
+  <h2>All Posts (including private)</h2>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Author</th>
+        <th>Title</th>
+        <th>Private</th>
+        <th>Created</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for post in posts %}
+        <tr>
+          <td>{{ post.id }}</td>
+          <td>{{ post.username }}</td>
+          <td><a href="{{ url_for('view_post', post_id=post.id) }}">{{ post.title }}</a></td>
+          <td>{{ '🔒' if post.is_private else '🌐' }}</td>
+          <td>{{ post.created_at }}</td>
+          <td>
+            <form method="post" action="{{ url_for('delete_post', post_id=post.id) }}" style="display:inline">
+              <button class="btn-sm danger">Delete</button>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}
