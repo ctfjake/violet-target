@@ -380,6 +380,18 @@ def greet():
 # ── Bootstrap ──────────────────────────────────────────────────────────────────
 
 
+
+@app.route("/ping")
+def ping():
+    # VULN: Command injection — user-controlled 'host' is concatenated into a
+    # shell command run via os.system, so /ping?host=8.8.8.8;id executes
+    # arbitrary commands on the server.
+    host = request.args.get("host", "127.0.0.1")
+    os.system("ping -c 1 " + host)
+    return "pinged " + host
+
+
+
 with app.app_context():
     init_db()
 
