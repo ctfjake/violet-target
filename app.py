@@ -353,6 +353,18 @@ def fetch():
     return render_template("fetch.html", url=url, result=result, error=error)
 
 
+# ── Open redirect ────────────────────────────────────────────────────────────
+
+
+@app.route("/go")
+def go():
+    # VULN: Open redirect — user-controlled 'url' is used as the redirect target
+    # with no allowlist or same-origin check, so /go?url=https://evil.example
+    # bounces the victim straight off-site (phishing / OAuth-token theft lever).
+    url = request.args.get("url", "")
+    return redirect(url)
+
+
 # ── Bootstrap ──────────────────────────────────────────────────────────────────
 
 
