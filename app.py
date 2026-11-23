@@ -377,6 +377,21 @@ def greet():
     return Markup("<h1>Hello, " + name + "!</h1>")
 
 
+# ── Proxy (SSRF) ─────────────────────────────────────────────────────────────
+
+
+@app.route("/proxy")
+def proxy():
+    # VULN: SSRF — the user-controlled 'url' query param is fetched server-side
+    # with no allowlist or internal-address filtering, so /proxy?url=http://169.254.169.254/latest/meta-data/
+    # lets an attacker reach cloud metadata and internal-only services.
+    url = request.args.get("url", "")
+    if not url:
+        return "missing url", 400
+    resp = requests.get(url, timeout=5)
+    return resp.text[:8000]
+
+
 # ── Bootstrap ──────────────────────────────────────────────────────────────────
 
 
