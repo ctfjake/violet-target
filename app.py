@@ -365,6 +365,18 @@ def go():
     return redirect(url)
 
 
+# ── Greeting (reflected XSS) ────────────────────────────────────────────────
+
+
+@app.route("/greet")
+def greet():
+    # VULN: Reflected XSS — the user-controlled 'name' query param is written
+    # straight into the HTML response with no escaping, so
+    # /greet?name=<script>alert(1)</script> executes in the victim's browser.
+    name = request.args.get("name", "friend")
+    return Markup("<h1>Hello, " + name + "!</h1>")
+
+
 # ── Bootstrap ──────────────────────────────────────────────────────────────────
 
 
